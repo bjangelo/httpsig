@@ -147,11 +147,11 @@ func getParams(req *http.Request, header, prefix string) *Params {
 	for i := len(values) - 1; i >= 0; i-- {
 		value := values[i]
 		if prefix != "" {
-			if trimmed := strings.TrimPrefix(value, prefix); trimmed != value {
-				value = trimmed
-			} else {
+			index := strings.Index(value, prefix)
+			if index == -1 {
 				continue
 			}
+			value = value[index:]
 		}
 
 		matches := paramRE.FindAllStringSubmatch(value, -1)

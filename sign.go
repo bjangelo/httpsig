@@ -88,7 +88,11 @@ func (r *Signer) Sign(req *http.Request) error {
 		return err
 	}
 
-	req.Header.Set("Authorization", "Signature "+params)
+	auth := "Signature " + params
+	if current, ok := req.Header["Authorization"]; ok {
+		auth = strings.Join(current, ", ") + ", " + auth
+	}
+	req.Header.Set("Authorization", auth)
 	return nil
 }
 
